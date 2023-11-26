@@ -1,43 +1,45 @@
 import CONFIG from '../globals/config';
 
-const CacheHelper = {
-  async cachingAppShell(requests) {
+const cacheHelper = {
+  async cachingAppShell(req) {
     const cache = await caches.open(CONFIG.CACHE_NAME);
-    await cache.addAll(requests);
+    cache.addAll(req);
   },
 
   async deleteOldCache() {
     const cacheNames = await caches.keys();
-    const cachePromises = cacheNames
+    cacheNames
         .filter((name) => name !== CONFIG.CACHE_NAME)
         .map((filteredName) => caches.delete(filteredName));
-
-    await Promise.all(cachePromises);
   },
 
-  async revalidateCache(request) {
+  async revalidateCache(req) {
+    const response = await caches.match(req);
+
+    if (response) {
+      this._fetchRequest(req);
+      return response;
+    }
+    return this._fetchRequest(req);
+  },
+
+  async fetchingCache(req) {
     try {
-      const response = await caches.match(request) || await fetch(request);
-
+      const response = await fetch(req);
       if (!response || response.status !== 200) {
-        throw new Error('Invalid response');
+        return response;
       }
-
-      await this._addCache(request, response.clone());
+      await this._addCache();
       return response;
     } catch (error) {
-      throw new Error(`Error revalidating cache: ${error.message}`);
+
     }
   },
 
-  async _addCache(request, response) {
-    try {
-      const cache = await caches.open(CONFIG.CACHE_NAME);
-      await cache.put(request, response);
-    } catch (error) {
-      throw new Error(`Error adding to cache: ${error.message}`);
-    }
+  async _addCache(req) {
+    const cache = await caches.open(CONFIG.CACHE_NAME);
+    cache.add(req);
   },
 };
 
-export default CacheHelper;
+export default cacheHelper;

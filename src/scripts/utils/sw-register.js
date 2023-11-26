@@ -16,20 +16,6 @@ const swRegister = async () => {
 
       await workbox.register();
       console.log('Service worker registered successfully.');
-
-      // Caching strategies for images (jpg, png, webp)
-      workbox.routing.registerRoute(
-          /\.(?:jpg|png|webp)$/,
-          new workbox.strategies.CacheFirst({
-            cacheName: 'images-cache',
-            plugins: [
-              new workbox.expiration.Plugin({
-                maxEntries: 50,
-                maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
-              }),
-            ],
-          }),
-      );
     }
   } catch (error) {
     console.error('Failed to register service worker:', error);
