@@ -329,18 +329,7 @@ const partnerAfterRegistation = (vehicles) => {
             </ul>
             <div id="listYourRentaled" class="listYourRentaled active">
                 <div class="listRentaledVehicle" id="listRentaledVehicle">
-                    <section class="rentaledVehicle">
-                        <img src="https://i.pinimg.com/564x/77/81/68/778168720cc2c34747b330e0d95ff389.jpg" alt="">
-                        <div class="rentaledVehicleInfo">
-                            <h4>Ryo Yamada</h4>
-                            <p>Waifuku</p>
-                        </div>
-                        <div class="availableInfo">
-                            <p class="available avia-on">Available</p>
-                            <p class="unavailabe">Unavailable</p>
-                        </div>
-                        <i class="fa-solid fa-trash fa-2xl" style="color: #f45d48;"></i>
-                    </section>
+                    
                 </div>
                 <div id="addRentaledVehicle" class="addRentaledVehicle">
                     <a href="#/addVehicle">
@@ -367,22 +356,24 @@ const partnerAfterRegistation = (vehicles) => {
 };
 
 // History of rented vehicles
-const cardForListRentaled = () => {
+const cardForListRentaled = (vehicle) => {
+  const availabilityClass = vehicle.isAvailable ? 'available' : 'unavailable';
+  const availabilitySwitch = vehicle.isAvailable ? 'avia-on' : 'avia-off';
   return `
-    <section class="rentaledHistory">
-        <img src="https://pbs.twimg.com/media/GA0ybC5bQAADN6t?format=jpg&name=4096x4096" alt="">
-        <div class="rentaledVehicleInfo">
-            <h4>Hiroi Kikuri</h4>
-            <p>Waifuku</p>
-        </div>
-        <div class="availableInfo">
-            <p class="available avia-on">Available</p>
-            <p class="unavailabe">Unavailable</p>
-        </div>
-        <i class="fa-solid fa-trash fa-2xl" style="color: #f45d48;"></i>
-    </section>
+      <section class="rentaledVehicle">
+          <img src="${vehicle.ImageUrl}" alt="foto ${vehicle.vehicleInformation.brand} ${vehicle.vehicleInformation.name}">
+          <div class="rentaledVehicleInfo">
+              <h4>${vehicle.vehicleInformation.brand} ${vehicle.vehicleInformation.name}</h4>
+              <p>${vehicle.vehicleInformation.type}</p>
+          </div>
+          <div class="availableInfo">
+              <p class="${availabilityClass} ${availabilitySwitch}" id="availability">${vehicle.isAvailable ? 'Available' : 'Unavailable'}</p>
+          </div>
+          <i class="fa-solid fa-trash fa-2xl delete-icon" data-vehicle-id="${vehicle.vehicleId}" style="color: #f45d48;"></i>
+      </section>
     `;
 };
+
 
 const userProfilePages = (userData) => {
   return `
@@ -681,7 +672,7 @@ const userHistoryPageHead = () => {
 };
 
 const userHistoryCard =() => {
-    return `
+  return `
     <section class="userRentaledHistory">
         <img src="https://i.pinimg.com/564x/80/16/fd/8016fd6864a1ffc27887cc7a5d814737.jpg" alt="">
         <div class="UserRentalInfo">

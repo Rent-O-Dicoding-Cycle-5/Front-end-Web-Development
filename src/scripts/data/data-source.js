@@ -43,6 +43,32 @@ class CarDbSource {
     const loginInfo = JSON.parse(localStorage.getItem('loginInfo')) || {};
     return loginInfo.uid || '';
   }
+
+  static async partnerCars() {
+    const url = API_ENDPOINT.PARTNER_CAR;
+    const options = {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.getAccessToken()}`,
+      },
+    };
+
+    const response = await this.fetchData(url, options);
+    return response.data.vehicles;
+  }
+
+  static async deletePartnerCar(vehicleId) {
+    const url = API_ENDPOINT.DELETE_PARTNER_CAR(vehicleId);
+    const options = {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${this.getAccessToken()}`,
+      },
+    };
+
+    const response = await this.fetchData(url, options);
+    return response;
+  }
 }
 
 export default CarDbSource;

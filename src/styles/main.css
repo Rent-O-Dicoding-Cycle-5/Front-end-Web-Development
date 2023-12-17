@@ -1508,6 +1508,11 @@ p, h4 {
   background-color: #078080;
 }
 
+.avia-off {
+  background-color: #B31312;
+  color: white;
+}
+
 .availableInfo p {
   padding-inline: 15px;
   padding-block: 10px;

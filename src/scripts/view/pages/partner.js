@@ -6,6 +6,7 @@ import {
   partnerAfterRegistation,
 } from '../template/templateCreator';
 import API_ENDPOINT from '../../globals/api-endpoint';
+import CarDbSource from '../../data/data-source';
 
 const Partner = {
   async render() {
@@ -82,6 +83,7 @@ const Partner = {
 
       // Check if the user is a partner
       const isPartner = userRoles.includes('Partner');
+      const vehicles = await CarDbSource.partnerCars();
 
       // Do not proceed with rendering if the user is a partner
       if (isPartner) {
@@ -89,7 +91,21 @@ const Partner = {
         formContainer.innerHTML = partnerAfterRegistation();
 
         const listRentaledContainer = document.getElementById('listRentaledVehicle');
-        listRentaledContainer.innerHTML += cardForListRentaled();
+        if (vehicles.length === 0) {
+          listRentaledContainer.innerHTML = '<h3>No Item founded</h3>';
+        }
+        vehicles.forEach((vehicle) => {
+          listRentaledContainer.innerHTML += cardForListRentaled(vehicle);
+        });
+
+        listRentaledContainer.addEventListener('click', async (event) => {
+          if (event.target.classList.contains('delete-icon')) {
+            const vehicleId = event.target.getAttribute('data-vehicle-id');
+            console.log(vehicleId);
+            await CarDbSource.deletePartnerCar(vehicleId);
+            window.location.reload();
+          }
+        });
       } else {
         // If the user does not have the "Partner" role, show the registration form
         const registrationFormContainer = document.getElementById('partnerForm');
