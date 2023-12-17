@@ -2,6 +2,7 @@ import CarDbSource from '../../data/data-source';
 import UrlParser from '../../routes/url-parser';
 import {vehicleDetail} from '../template/templateCreator';
 import Swal from 'sweetalert2/dist/sweetalert2.all.min';
+import Cookies from 'js-cookie';
 
 const Detail = {
   async render() {
@@ -30,7 +31,7 @@ const Detail = {
   },
 
   loginCheck() {
-    const isLoggedIn = localStorage.getItem('loginInfo') !== null;
+    const isLoggedIn = Cookies.get('uid') || {};
 
     if (!isLoggedIn) {
       Swal.fire({
@@ -39,7 +40,7 @@ const Detail = {
         text: 'Anda harus login untuk melakukan pemesanan',
         showCancelButton: true,
         cancelButtonText: 'Batal',
-        confirmButtonText: 'Log In',
+        confirmButtonText: 'Login',
       }).then((result) => {
         if (result.isConfirmed) {
           window.location.href = '#/login';

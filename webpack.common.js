@@ -9,6 +9,8 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const ImageminWebpWebpackPlugin = require('imagemin-webp-webpack-plugin');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
+const HtmlMinimizerPlugin = require('html-minimizer-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -30,10 +32,34 @@ module.exports = {
   optimization: {
     minimize: true,
     minimizer: [
-      new CssMinimizerPlugin(),
+      new CssMinimizerPlugin({
+        test: /\.css$/i,
+        parallel: true,
+        minimizerOptions: {
+          preset: [
+            'default',
+            {
+              discardComments: {removeAll: true},
+            },
+          ],
+        },
+      }),
       new TerserPlugin({
+        minify: TerserPlugin.uglifyJsMinify,
         parallel: true,
         extractComments: false,
+      }),
+      new MiniCssExtractPlugin({
+        filename: '[name].css',
+        chunkFilename: '[id].css',
+      }),
+      new HtmlMinimizerPlugin({
+        test: /\.html$/i,
+        minimizerOptions: {
+          collapseWhitespace: true,
+          removeComments: true,
+          removeAttributeQuotes: true,
+        },
       }),
     ],
     splitChunks: {
@@ -61,9 +87,10 @@ module.exports = {
   plugins: [
     new WorkboxWebpackPlugin.GenerateSW({
       swDest: './sw.bundle.js',
+      skipWaiting: true,
       runtimeCaching: [
         {
-          urlPattern: new RegExp('^https://storage.googleapis.com/rental-online-dicoding-cycle-5.appspot.com/vehicles/AqEh9gIYgINeEDJBHZDh7NFjuyn1/images/'),
+          urlPattern: new RegExp('^https://storage.googleapis.com/rental-online-dicoding-cycle-5.appspot.com/'),
           urlPattern: new RegExp('^https://rento-backend-api-d6zuozodga-et.a.run.app/'),
           handler: 'StaleWhileRevalidate',
           options: {
@@ -122,6 +149,26 @@ module.exports = {
     new BundleAnalyzerPlugin({
       analyzerMode: 'static',
       openAnalyzer: false,
+    }),
+    new CompressionPlugin({
+      filename: '[path][base].gz',
+      algorithm: 'gzip',
+      test: /\.(js|css|html|png|jpg)$/,
+      compressionOptions: {
+        level: 9,
+      },
+      threshold: 10240,
+      minRatio: 0.8,
+    }),
+    new CompressionPlugin({
+      filename: '[path][base].br',
+      algorithm: 'brotliCompress',
+      test: /\.(js|css|html|png|jpg)$/,
+      compressionOptions: {
+        level: 9,
+      },
+      threshold: 10240,
+      minRatio: 0.8,
     }),
   ],
 };

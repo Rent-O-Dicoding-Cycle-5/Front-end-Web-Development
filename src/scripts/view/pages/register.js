@@ -7,10 +7,10 @@ const Register = {
       <div id="register-container">
           <form id="register-form">
               <h2>Daftar</h2>
-              <input type="text" name="name" id="name" placeholder="Masukkan Nama Anda">
-              <input type="email" name="email" id="email" placeholder="Masukkan Email">
-              <input type="password" name="password" id="password" placeholder="Masukkan kata sandi">
-              <input type="password" name="confirm_password" id="confirm_password" placeholder="Masukkan ulang kata sandi">
+              <input type="text" name="name" id="name" placeholder="Masukkan Nama Anda" autocomplete="name">
+              <input type="email" name="email" id="email" placeholder="Masukkan Email" autocomplete="email">
+              <input type="password" name="password" id="password" placeholder="Masukkan kata sandi" autocomplete="new-password">
+              <input type="password" name="confirm_password" id="confirm_password" placeholder="Masukkan ulang kata sandi" autocomplete="new-password">
               <button type="submit" id="register-btn">Daftar</button>
               <br>
               <p id="login" class="login-link">Sudah punya akun? <a href="#/login">Login</a></p>
@@ -83,9 +83,13 @@ const Register = {
         Swal.fire({
           icon: 'success',
           title: successMessage,
-          html: `Kami telah mengirimkan email konfirmasi.<br>Silahkan cek kotak masuk Anda!</strong>`,
+          text: 'Silakan login untuk melanjutkan',
           focusConfirm: true,
-          confirmButtonText: 'OK',
+          confirmButtonText: 'Login',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = '#/login';
+          }
         });
       } else {
         console.error('Registration failed:', data);

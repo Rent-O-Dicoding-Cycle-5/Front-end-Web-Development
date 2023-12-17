@@ -2,6 +2,7 @@ import CarDbSource from '../../data/data-source';
 import {userProfilePages} from '../template/templateCreator';
 import API_ENDPOINT from '../../globals/api-endpoint';
 import Swal from 'sweetalert2/dist/sweetalert2.all.min';
+import Cookies from 'js-cookie'; // Import the Cookies library
 
 const userProfile = {
   async render() {
@@ -12,8 +13,9 @@ const userProfile = {
 
   async afterRender() {
     try {
-      const loginInfo = localStorage.getItem('loginInfo');
-      if (!loginInfo) {
+      const accessToken = Cookies.get('uid');
+
+      if (!accessToken) {
         Swal.fire({
           icon: 'info',
           title: 'Anda belum login',
@@ -24,6 +26,8 @@ const userProfile = {
         }).then((result) => {
           if (result.isConfirmed) {
             window.location.hash = '#/login';
+          } else {
+            window.location.hash = '#/';
           }
         });
 

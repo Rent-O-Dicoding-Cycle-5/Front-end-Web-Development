@@ -3,6 +3,7 @@ import CarDbSource from '../../data/data-source';
 import UrlParser from '../../routes/url-parser';
 import {vehicleCheckin} from '../template/templateCreator';
 import API_ENDPOINT from '../../globals/api-endpoint';
+import Cookies from 'js-cookie'; // Import the Cookies library
 
 const Checking = {
   async render() {
@@ -15,9 +16,10 @@ const Checking = {
 
   async afterRender() {
     try {
-      const loginInfo = JSON.parse(localStorage.getItem('loginInfo')) || {};
+      const accessToken = Cookies.get('uid') || {}; // Get the access token from the cookie
 
-      if (!loginInfo.uid) {
+      // Check if the access token is present in the cookie
+      if (!accessToken) {
         window.location.hash = '#/login';
         return;
       }
@@ -56,10 +58,6 @@ const Checking = {
 
     const url = `${API_ENDPOINT.ORDER_RENTAL}/${formData.vehicleId}`;
 
-    // Read the login information from localStorage
-    const loginInfo = JSON.parse(localStorage.getItem('loginInfo')) || {};
-    const accessToken = loginInfo.uid || '';
-
     // Validate form fields
     if (!validateForm()) {
       return;
@@ -69,6 +67,8 @@ const Checking = {
     if (!validateDate()) {
       return;
     }
+
+    const accessToken = Cookies.get('uid') || {}; // Get the access token from the cookie
 
     try {
       // Make the POST request to the API endpoint
@@ -171,7 +171,6 @@ function validateForm() {
         text: `${displayValue} harus diisi`,
         icon: 'warning',
       });
-
       return false;
     }
   }
@@ -188,10 +187,8 @@ function validateDate() {
       text: 'Tanggal Selesai harus melebihi Tanggal Mulai',
       icon: 'warning',
     });
-
     return false;
   }
-
   return true;
 }
 

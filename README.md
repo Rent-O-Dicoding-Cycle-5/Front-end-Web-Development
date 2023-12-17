@@ -1,6 +1,8 @@
 # Rent'O - Car Rental Service
 
-For contributing, create a PR, please!
+For contributing, create a PR, please! :D
+
+Please use Main branch every create a PR! :D
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/06d93c93-cd3f-4435-8b23-9dd73dae76fc/deploy-status)](https://app.netlify.com/sites/rent-o/deploys)
 
@@ -23,8 +25,8 @@ Rent'O is a user-friendly web application that allows users to browse, select, a
 - **User Authentication:** Secure user authentication system to protect user accounts.
 - **Car Listings:** Browse through a variety of available cars with detailed information.
 - **Reservation System:** Easily reserve a car for a specific date and time.
-- ~~**User Dashboard:** View reservation history and manage account details.~~
-- ~~**Responsive Design:** Ensures a consistent experience across different devices.~~
+- **User Dashboard:** View reservation history and manage account details.
+- **Responsive Design:** Ensures a consistent experience across different devices.
 
 ## Getting Started
 

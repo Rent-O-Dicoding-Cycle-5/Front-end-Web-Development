@@ -2,6 +2,7 @@ import {addRentalVehicle} from '../template/templateCreator';
 import axios from 'axios';
 import API_ENDPOINT from '../../globals/api-endpoint';
 import Swal from 'sweetalert2/dist/sweetalert2.all.min';
+import Cookies from 'js-cookie';
 
 const addVehicle = {
   async render() {
@@ -56,8 +57,7 @@ const addVehicle = {
         formData.append('address', document.getElementById('address').value);
 
         // Retrieve Bearer token from local storage
-        const loginInfo = JSON.parse(localStorage.getItem('loginInfo')) || {};
-        const accessToken = loginInfo.uid || '';
+        const uid = Cookies.get('uid') || '';
 
         const costInputField = document.getElementById('cost');
         costInputField.addEventListener('input', function() {
@@ -73,7 +73,7 @@ const addVehicle = {
         try {
           const response = await axios.post(API_ENDPOINT.CREATE_CAR, formData, {
             headers: {
-              'Authorization': `Bearer ${accessToken}`,
+              'Authorization': `Bearer ${uid}`,
               'Content-Type': 'multipart/form-data', // Set content type for FormData
             },
           });

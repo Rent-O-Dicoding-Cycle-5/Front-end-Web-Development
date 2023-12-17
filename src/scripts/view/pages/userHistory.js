@@ -1,11 +1,10 @@
-import {cardForListRentaled, userHistoryCard, userHistoryPageHead} from '../template/templateCreator';
+import {userHistoryCard, userHistoryPageHead} from '../template/templateCreator';
+import CarDbSource from '../../data/data-source';
 
 const userHistoryPage = {
   async render() {
     return `
-        <div id="userHistory">
-
-        </div>
+        <div id="userHistory"></div>
     `;
   },
 
@@ -13,8 +12,13 @@ const userHistoryPage = {
     try {
       const userHistoryContainer = document.getElementById('userHistory');
       userHistoryContainer.innerHTML = userHistoryPageHead();
+
+      const orderHistory = await CarDbSource.getOrderHistory();
+
       const userListContainer = document.getElementById('userHistoryList');
-      userListContainer.innerHTML = userHistoryCard();
+      orderHistory.forEach((rent) => {
+        userListContainer.innerHTML += userHistoryCard(rent);
+      });
     } catch (error) {
       console.error(error);
     }
