@@ -485,18 +485,20 @@ Rental-bar
   margin: 0;
 }
 
-.search-bar button {
+.search-bar #submitRentalOption {
   margin-top: 20px;
   padding-inline: 5%;
   border-radius: 20px;
   height: 40px;
   align-self: center;
-  background-color: #078080;
-  transition: 700ms;
+  background-color: #7B66FF;
+  color: white;
+  font-size: large;
 }
 
-.search-bar button:hover:focus {
-  background-color: #065c5c;
+.search-bar #submitRentalOption:hover {
+  background-color: #5FBDFF;
+  transition: 700ms;
 }
 
 .rental-option {
@@ -1344,7 +1346,10 @@ width: 100%;
 #type,
 #seats,
 #year,
-#location {
+#location,
+#vehicle-location,
+#vehicle-brand,
+#vehicle-type {
   padding-block: 8px;
   width: 100%;
   margin-bottom: 10px;
@@ -1508,6 +1513,11 @@ p, h4 {
   background-color: #078080;
 }
 
+.avia-off {
+  background-color: #B31312;
+  color: white;
+}
+
 .availableInfo p {
   padding-inline: 15px;
   padding-block: 10px;
@@ -1541,14 +1551,18 @@ p, h4 {
   flex-direction: row;
   background-color: white;
   border-radius: 5px;
-  padding-inline: 20px;
   padding-block: 10px;
   justify-content: space-between;
   align-items: center;
+  margin: 10px;
 }
 
-.userRentaledHistory div {
-  margin-inline: 10px;
+.userRentaledHistory .rental-info {
+  margin-inline: 40px;
+}
+
+.userRentaledHistory .date-info{
+  margin-inline: 40px;
 }
 
 .userRentaledHistory div p {

@@ -1,8 +1,8 @@
 {
-    "name": "Rent'O",
+    "name": "Rent'O - A Better Way to Find Your Perfect Car",
     "short_name": "Rent'O",
     "start_url": "./index.html",
-    "description": "A website to rent a car simply and quickly",
+    "description": "A Better Way to Find Your Perfect Car. Simplicity in Every Mile: Rent'O, Where Car Rental Meets Effortless Ease.",
     "display": "standalone",
     "background_color": "#FFFFFF",
     "theme_color": "#FFFFFF",

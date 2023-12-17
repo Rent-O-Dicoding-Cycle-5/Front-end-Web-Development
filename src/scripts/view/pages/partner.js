@@ -1,11 +1,13 @@
 import axios from 'axios';
 import Swal from 'sweetalert2/dist/sweetalert2.all.min';
 import {
-  cardForListRentaled,
+  generateVehicleCards,
   createPartnerRegisterPages,
   partnerAfterRegistation,
 } from '../template/templateCreator';
 import API_ENDPOINT from '../../globals/api-endpoint';
+import CarDbSource from '../../data/data-source';
+import Cookies from 'js-cookie'; // Import the Cookies library
 
 const Partner = {
   async render() {
@@ -32,12 +34,17 @@ const Partner = {
       return '';
     }
 
-    // Read the login information from localStorage
-    const loginInfo = JSON.parse(localStorage.getItem('loginInfo')) || {};
-    const userRoles = Array.isArray(loginInfo.roles) ? loginInfo.roles : [];
+    // Read the login information from Cookies
+    // eslint-disable-next-line no-unused-vars
+    const uid = Cookies.get('uid') || '';
+    // eslint-disable-next-line no-unused-vars
+    const username = Cookies.get('username') || '';
+    // eslint-disable-next-line no-unused-vars
+    const email = Cookies.get('email') || '';
+    const roles = JSON.parse(Cookies.get('roles')) || [];
 
     // Check if the user has the "Partner" role
-    const isPartner = userRoles.includes('Partner');
+    const isPartner = roles.includes('Partner');
 
     // If the user has the "Partner" role, render the page
     if (isPartner) {
@@ -75,21 +82,52 @@ const Partner = {
         return;
       }
 
-      // Read the login information from localStorage
-      const loginInfo = JSON.parse(localStorage.getItem('loginInfo')) || {};
-      const userRoles = loginInfo.roles || [];
-      const accessToken = loginInfo.uid || ''; // Assuming 'uid' contains the access token
+      // Read the login information from Cookies
+      const uid = Cookies.get('uid') || '';
+      // eslint-disable-next-line no-unused-vars
+      const username = Cookies.get('username') || '';
+      // eslint-disable-next-line no-unused-vars
+      const email = Cookies.get('email') || '';
+      const roles = JSON.parse(Cookies.get('roles')) || [];
+      const accessToken = uid; // Assuming 'uid' contains the access token
+
 
       // Check if the user is a partner
-      const isPartner = userRoles.includes('Partner');
+      const vehicles = await CarDbSource.partnerCars();
+      const isPartner = roles.includes('Partner');
 
       // Do not proceed with rendering if the user is a partner
       if (isPartner) {
         const formContainer = document.getElementById('partnerForm');
         formContainer.innerHTML = partnerAfterRegistation();
-
         const listRentaledContainer = document.getElementById('listRentaledVehicle');
-        listRentaledContainer.innerHTML += cardForListRentaled();
+        if (vehicles.length === 0) {
+          listRentaledContainer.innerHTML = '<h3>No Item founded</h3>';
+        }
+        vehicles.forEach((vehicle) => {
+          listRentaledContainer.innerHTML += cardForListRentaled(vehicle);
+        });
+
+        listRentaledContainer.addEventListener('click', async (event) => {
+          if (event.target.classList.contains('delete-icon')) {
+            const vehicleId = event.target.getAttribute('data-vehicle-id');
+            console.log(vehicleId);
+            await CarDbSource.deletePartnerCar(vehicleId);
+            window.location.reload();
+          }
+        });
+        console.log('apakah ada?', listRentaledContainer);
+
+        const partnerVehicles = await CarDbSource.getPartnerVehicle();
+        console.log('Data kendaraan diterima:', partnerVehicles);
+        if (partnerVehicles.length === 0) {
+          listRentaledContainer.innerHTML = '<h3>No item founded</h3>';
+        } else {
+          // Buat sebuah string HTML dari seluruh vehicles
+          const vehiclesHTML = partnerVehicles.map((vehicle) => generateVehicleCards(vehicle)).join('');
+          // Kemudian update innerHTML sekali saja
+          listRentaledContainer.innerHTML = vehiclesHTML;
+        }
       } else {
         // If the user does not have the "Partner" role, show the registration form
         const registrationFormContainer = document.getElementById('partnerForm');
@@ -142,14 +180,21 @@ const Partner = {
               // Handle success (e.g., show a success message)
               Swal.fire({
                 title: 'Berhasil Daftar',
-                text: 'Anda telah terdaftar sebagai partner Rent\'O',
+                html: `Anda telah terdaftar sebagai partner Rent\'O.<br>Silahkan login ulang!`,
                 icon: 'success',
+                confirmButtonText: 'Login Ulang',
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  // Clear all cookies
+                  const cookies = Cookies.get();
+                  // eslint-disable-next-line guard-for-in
+                  for (const cookie in cookies) {
+                    Cookies.remove(cookie);
+                  }
+                  window.location.href = '#/login';
+                  window.location.reload();
+                }
               });
-
-              const existingLoginInfo = JSON.parse(localStorage.getItem('loginInfo')) || {};
-              const updatedRoles = {...existingLoginInfo.roles, 1: 'Partner'};
-              const updatedLoginInfo = {...existingLoginInfo, roles: updatedRoles};
-              localStorage.setItem('loginInfo', JSON.stringify(updatedLoginInfo));
             } else {
               // Handle error (e.g., show an error message)
               Swal.fire({
@@ -171,7 +216,7 @@ const Partner = {
 
 // Function to check if the user is logged in (example implementation)
 function checkUserLoggedIn() {
-  return localStorage.getItem('loginInfo') !== null;
+  return Cookies.get('uid') !== undefined;
 }
 
 export default Partner;

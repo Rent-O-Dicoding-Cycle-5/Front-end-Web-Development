@@ -35,23 +35,3 @@ function previewImage() {
     reader.readAsDataURL(file);
   }
 }
-
-// function formatRupiah(input) {
-//   // Mengambil nilai input
-//   let nilaiUang = input.value;
-
-//   nilaiUang = nilaiUang.replace(/\D/g, '');
-
-//   // Format menjadi mata uang Rupiah
-//   nilaiUang = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(nilaiUang);
-
-//   // Menetapkan nilai yang diformat ke input
-//   return input.value = nilaiUang;
-// }
-
-// window.onload = function() {
-// // Ambil elemen input dengan ID 'paymentCheck'
-// let inputPayment = document.getElementById('paymentCheck');
-// // Panggil fungsi formatRupiah dengan input tersebut
-// formatRupiah(inputPayment);
-// };

@@ -1,20 +1,23 @@
 {
   "name": "front-end-web-development",
   "version": "1.0.0",
-  "description": "",
+  "description": "Front-end Development - Dicoding Cycle 5",
   "main": "index.js",
   "scripts": {
     "start-dev": "webpack serve --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
     "lint": "eslint --ext .js ./src",
     "lint-fix": "eslint --fix --ext .js ./src",
-    "serve": "http-server dist",
+    "serve": "http-server ./dist -b -g -d false",
     "build-serve": "yarn run build && yarn run serve",
-    "test": "karma start",
     "build-image": "node sharp.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Faiz Akhmad Daulay, Faisal A F Rahman, Benaya Adi Sahat Dwiyanto",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Rent-O-Dicoding-Cycle-5/Front-end-Web-Development.git"
+  },
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.23.6",
@@ -22,11 +25,13 @@
     "@fortawesome/fontawesome-free": "^6.5.1",
     "babel-loader": "^9.1.3",
     "clean-webpack-plugin": "^4.0.0",
+    "compression-webpack-plugin": "^10.0.0",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.8.1",
     "css-minimizer-webpack-plugin": "^5.0.1",
     "eslint": ">=8.55.0",
     "eslint-config-google": "^0.14.0",
+    "html-minimizer-webpack-plugin": "^4.4.0",
     "html-webpack-plugin": "^5.5.4",
     "http-server": "^14.1.1",
     "imagemin-mozjpeg": "^9.0.0",
@@ -36,6 +41,7 @@
     "sharp": "^0.33.0",
     "style-loader": "^3.3.3",
     "terser-webpack-plugin": "^5.3.9",
+    "uglify-js": "^3.17.4",
     "webpack": "^5.89.0",
     "webpack-bundle-analyzer": "^4.10.1",
     "webpack-cli": "^5.1.4",
@@ -47,6 +53,7 @@
   },
   "dependencies": {
     "axios": "^1.6.2",
+    "js-cookie": "^3.0.5",
     "lazysizes": "^5.3.2",
     "regenerator-runtime": "^0.14.0",
     "sweetalert2": "^11.10.1",

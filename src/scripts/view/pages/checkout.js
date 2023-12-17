@@ -3,6 +3,7 @@ import UrlParser from '../../routes/url-parser';
 import {paymentCheck} from '../template/templateCreator';
 import API_ENDPOINT from '../../globals/api-endpoint';
 import Swal from 'sweetalert2/dist/sweetalert2.all.min';
+import Cookies from 'js-cookie';
 
 const Checkout = {
   async render() {
@@ -40,8 +41,7 @@ const Checkout = {
       const totalPayment = document.getElementById('paymentCheck').value.replace(/[,.]|Rp/g, '');
 
       const putUrl = `${API_ENDPOINT.UPDATE_PAYMENT}/${rentId}`;
-      const loginInfo = JSON.parse(localStorage.getItem('loginInfo')) || {};
-      const accessToken = loginInfo.uid || '';
+      const accessToken = Cookies.get('uid') || {};
 
       const response = await fetch(putUrl, {
         method: 'PUT',

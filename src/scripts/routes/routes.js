@@ -28,7 +28,7 @@ const routes = {
   '/addvehicle': addVehicle,
   '/forgot-password': ForgotPassword,
   '/user': userProfile,
-  '/userhistory': userHistoryPage,
+  '/history': userHistoryPage,
 };
 
 export default routes;
