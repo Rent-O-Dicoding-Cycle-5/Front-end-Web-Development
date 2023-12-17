@@ -366,24 +366,6 @@ const partnerAfterRegistation = (vehicles) => {
   `;
 };
 
-// History of rented vehicles
-const cardForListRentaled = () => {
-  return `
-    <section class="rentaledHistory">
-        <img src="https://pbs.twimg.com/media/GA0ybC5bQAADN6t?format=jpg&name=4096x4096" alt="">
-        <div class="rentaledVehicleInfo">
-            <h4>Hiroi Kikuri</h4>
-            <p>Waifuku</p>
-        </div>
-        <div class="availableInfo">
-            <p class="available avia-on">Available</p>
-            <p class="unavailabe">Unavailable</p>
-        </div>
-        <i class="fa-solid fa-trash fa-2xl" style="color: #f45d48;"></i>
-    </section>
-    `;
-};
-
 const userProfilePages = (userData) => {
   return `
     <div class="userContainer" id="userContainer">
@@ -681,7 +663,7 @@ const userHistoryPageHead = () => {
 };
 
 const userHistoryCard =() => {
-    return `
+  return `
     <section class="userRentaledHistory">
         <img src="https://i.pinimg.com/564x/80/16/fd/8016fd6864a1ffc27887cc7a5d814737.jpg" alt="">
         <div class="UserRentalInfo">
@@ -694,6 +676,25 @@ const userHistoryCard =() => {
         </div>
     </section> 
     `;
+};
+
+// History of rented vehicles
+const cardForListRentaled = (vehicle) => {
+  const availabilityClass = vehicle.isAvailable ? 'available' : 'unavailable';
+  const availabilitySwitch = vehicle.isAvailable ? 'avia-on' : 'avia-off';
+  return `
+        <section class="rentaledVehicle">
+            <img src="${vehicle.ImageUrl}" alt="foto ${vehicle.vehicleInformation.brand} ${vehicle.vehicleInformation.name}">
+            <div class="rentaledVehicleInfo">
+                <h4>${vehicle.vehicleInformation.brand} ${vehicle.vehicleInformation.name}</h4>
+                <p>${vehicle.vehicleInformation.type}</p>
+            </div>
+            <div class="availableInfo">
+                <p class="${availabilityClass} ${availabilitySwitch}" id="availability">${vehicle.isAvailable ? 'Available' : 'Unavailable'}</p>
+            </div>
+            <i class="fa-solid fa-trash fa-2xl delete-icon" data-vehicle-id="${vehicle.vehicleId}" style="color: #f45d48;"></i>
+        </section>
+      `;
 };
 
 module.exports = {
